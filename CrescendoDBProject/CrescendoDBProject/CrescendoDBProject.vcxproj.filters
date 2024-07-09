@@ -26,5 +26,8 @@
     <ClInclude Include="Attribute.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
+    <ClInclude Include="Varchar.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

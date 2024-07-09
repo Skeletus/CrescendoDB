@@ -8,10 +8,13 @@ public:
     {
         INT,
         DOUBLE,
-        STRING
+        VARCHAR
     };
 
-    Attribute(const std::string& name, Type type) : name(name), type(type) {}
+    Attribute() : name(""), type(Type::INT), varcharLength(0) {} // Constructor predeterminado
+
+    Attribute(const std::string& name, Type type, size_t length = 0)
+        : name(name), type(type), varcharLength(length) {}
 
     std::string GetName() const 
     {
@@ -23,7 +26,12 @@ public:
         return type;
     }
 
+    size_t getLength() const {
+        return varcharLength;
+    }
+
 private:
     std::string name;
     Type type;
+    size_t varcharLength;
 };
