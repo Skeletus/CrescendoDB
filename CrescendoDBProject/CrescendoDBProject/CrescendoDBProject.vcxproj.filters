@@ -29,5 +29,11 @@
     <ClInclude Include="Varchar.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
+    <ClInclude Include="BinaryWriter.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="CrescendoDBProject.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

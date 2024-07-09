@@ -1,6 +1,11 @@
 #pragma once
 #include <string>
 
+/*
+* int intAtrName
+* float floatAtrName
+* varchar(N) varcharName
+*/
 class Attribute 
 {
 public:
@@ -11,7 +16,7 @@ public:
         VARCHAR
     };
 
-    Attribute() : name(""), type(Type::INT), varcharLength(0) {} // Constructor predeterminado
+    Attribute() : name(""), type(Type::INT), varcharLength(0) {} // Constructor
 
     Attribute(const std::string& name, Type type, size_t length = 0)
         : name(name), type(type), varcharLength(length) {}
@@ -26,7 +31,7 @@ public:
         return type;
     }
 
-    size_t getLength() const {
+    size_t GetVarcharLength() const {
         return varcharLength;
     }
 

@@ -3,35 +3,48 @@
 class Varchar 
 {
 public:
-    Varchar(size_t maxLength) : maxLength(maxLength) 
+    Varchar(size_t maxLength) : maxLength(maxLength), value(nullptr)
     {
-        if (maxLength > 255) 
+        if (maxLength > 255)
         {
             throw std::invalid_argument("Maximum length for Varchar is 255");
         }
     }
 
-    Varchar(const std::string& value, size_t maxLength) : maxLength(maxLength) 
+    Varchar(const std::string& value, size_t maxLength) : maxLength(maxLength), value(nullptr)
     {
-        if (maxLength > 255) 
+        if (maxLength > 255)
         {
             throw std::invalid_argument("Maximum length for Varchar is 255");
         }
-        setValue(value);
+        SetValue(value);
     }
 
-    void setValue(const std::string& value) 
+    ~Varchar()
     {
-        if (value.length() > maxLength) 
+        delete[] value;
+    }
+
+    void SetValue(const std::string& value)
+    {
+        if (value.length() > maxLength)
         {
             throw std::invalid_argument("Value exceeds maximum length for Varchar");
         }
-        this->value = value;
+        delete[] this->value; // Liberar memoria previamente asignada
+
+        this->value = new char[value.length() + 1]; // Asignar memoria para el nuevo valor
+        std::strcpy(this->value, value.c_str()); // Copiar el valor al buffer
     }
 
-    std::string getValue() const 
+    const char* GetValue() 
     {
         return value;
+    }
+
+    size_t GetVarcharLength()
+    {
+        return maxLength;
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Varchar& varchar) 
@@ -42,5 +55,5 @@ public:
 
 private:
     size_t maxLength;
-    std::string value;
+    char* value;
 };

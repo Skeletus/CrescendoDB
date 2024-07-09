@@ -10,7 +10,9 @@
 class Record 
 {
 public:
-    using ValueType = std::variant<int, double, Varchar>;
+    using ValueType = std::variant<int, double, const char*>;
+
+    Record() = default;
 
     void AddAttribute(const std::string& name, Attribute::Type type, size_t length = 0) 
     {
@@ -69,6 +71,143 @@ public:
         }
     }
 
+    /*
+    std::vector<char> Serialize() const
+    {
+        std::vector<char> data;
+
+        // Serializar el número de atributos
+        size_t numAttributes = attributes.size();
+        data.insert(data.end(), reinterpret_cast<const char*>(&numAttributes), reinterpret_cast<const char*>(&numAttributes) + sizeof(numAttributes));
+
+        // Serializar cada atributo
+        for (const auto& [name, attribute] : attributes)
+        {
+            size_t nameSize = name.size();
+            data.insert(data.end(), reinterpret_cast<const char*>(&nameSize), reinterpret_cast<const char*>(&nameSize) + sizeof(nameSize));
+            data.insert(data.end(), name.begin(), name.end());
+
+            auto type = attribute.GetType();
+            data.insert(data.end(), reinterpret_cast<const char*>(&type), reinterpret_cast<const char*>(&type) + sizeof(type));
+
+            auto length = attribute.getLength();
+            data.insert(data.end(), reinterpret_cast<const char*>(&length), reinterpret_cast<const char*>(&length) + sizeof(length));
+        }
+
+        // Serializar los valores
+        size_t numValues = values.size();
+        data.insert(data.end(), reinterpret_cast<const char*>(&numValues), reinterpret_cast<const char*>(&numValues) + sizeof(numValues));
+
+        for (const auto& [name, value] : values)
+        {
+            size_t nameSize = name.size();
+            data.insert(data.end(), reinterpret_cast<const char*>(&nameSize), reinterpret_cast<const char*>(&nameSize) + sizeof(nameSize));
+            data.insert(data.end(), name.begin(), name.end());
+
+            std::visit([&data](auto&& arg) {
+                using T = std::decay_t<decltype(arg)>;
+                if constexpr (std::is_same_v<T, int> || std::is_same_v<T, double>)
+                {
+                    data.insert(data.end(), reinterpret_cast<const char*>(&arg), reinterpret_cast<const char*>(&arg) + sizeof(arg));
+                }
+                else if constexpr (std::is_same_v<T, Varchar>)
+                {
+                    auto str = arg.getValue();
+                    size_t strSize = str.size();
+                    data.insert(data.end(), reinterpret_cast<const char*>(&strSize), reinterpret_cast<const char*>(&strSize) + sizeof(strSize));
+                    data.insert(data.end(), str.begin(), str.end());
+                }
+                }, value);
+        }
+
+        return data;
+    }
+
+    static Record Deserialize(const std::vector<char>& data)
+    {
+        Record record;
+        size_t offset = 0;
+
+        // Deserializar el número de atributos
+        size_t numAttributes;
+        std::memcpy(&numAttributes, &data[offset], sizeof(numAttributes));
+        offset += sizeof(numAttributes);
+
+        for (size_t i = 0; i < numAttributes; ++i)
+        {
+            size_t nameSize;
+            std::memcpy(&nameSize, &data[offset], sizeof(nameSize));
+            offset += sizeof(nameSize);
+
+            std::string name(nameSize, ' ');
+            std::memcpy(&name[0], &data[offset], nameSize);
+            offset += nameSize;
+
+            Attribute::Type type;
+            std::memcpy(&type, &data[offset], sizeof(type));
+            offset += sizeof(type);
+
+            size_t length;
+            std::memcpy(&length, &data[offset], sizeof(length));
+            offset += sizeof(length);
+
+            record.AddAttribute(name, type, length);
+        }
+
+        // Deserializar los valores
+        size_t numValues;
+        std::memcpy(&numValues, &data[offset], sizeof(numValues));
+        offset += sizeof(numValues);
+
+        for (size_t i = 0; i < numValues; ++i)
+        {
+            size_t nameSize;
+            std::memcpy(&nameSize, &data[offset], sizeof(nameSize));
+            offset += sizeof(nameSize);
+
+            std::string name(nameSize, ' ');
+            std::memcpy(&name[0], &data[offset], nameSize);
+            offset += nameSize;
+
+            auto type = record.attributes.at(name).GetType();
+            switch (type)
+            {
+            case Attribute::Type::INT:
+            {
+                int intValue;
+                std::memcpy(&intValue, &data[offset], sizeof(intValue));
+                offset += sizeof(intValue);
+                record.SetValue(name, intValue);
+                break;
+            }
+            case Attribute::Type::DOUBLE:
+            {
+                double doubleValue;
+                std::memcpy(&doubleValue, &data[offset], sizeof(doubleValue));
+                offset += sizeof(doubleValue);
+                record.SetValue(name, doubleValue);
+                break;
+            }
+            case Attribute::Type::VARCHAR:
+            {
+                size_t strSize;
+                std::memcpy(&strSize, &data[offset], sizeof(strSize));
+                offset += sizeof(strSize);
+
+                std::string str(strSize, ' ');
+                std::memcpy(&str[0], &data[offset], strSize);
+                offset += strSize;
+
+                record.SetValue(name, Varchar(str, strSize));
+                break;
+            }
+            }
+        }
+
+        return record;
+    }
+    */
+
 private:
     std::unordered_map<std::string, Attribute> attributes;
     std::unordered_map<std::string, ValueType> values;
@@ -83,7 +222,7 @@ private:
         case Attribute::Type::DOUBLE:
             return std::holds_alternative<double>(value);
         case Attribute::Type::VARCHAR:
-            return std::holds_alternative<Varchar>(value);
+            return std::holds_alternative<const char*>(value);
         }
         return false;
     }
