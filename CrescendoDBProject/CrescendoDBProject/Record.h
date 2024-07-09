@@ -63,7 +63,7 @@ public:
         }
     }
 
-    /*
+    
     std::vector<char> Serialize() const
     {
         std::vector<char> data;
@@ -82,7 +82,7 @@ public:
             auto type = attribute.GetType();
             data.insert(data.end(), reinterpret_cast<const char*>(&type), reinterpret_cast<const char*>(&type) + sizeof(type));
 
-            auto length = attribute.getLength();
+            auto length = attribute.GetVarcharLength();
             data.insert(data.end(), reinterpret_cast<const char*>(&length), reinterpret_cast<const char*>(&length) + sizeof(length));
         }
 
@@ -98,16 +98,9 @@ public:
 
             std::visit([&data](auto&& arg) {
                 using T = std::decay_t<decltype(arg)>;
-                if constexpr (std::is_same_v<T, int> || std::is_same_v<T, double>)
+                if constexpr (std::is_same_v<T, int> || std::is_same_v<T, double> || std::is_same_v<T, const char*>)
                 {
                     data.insert(data.end(), reinterpret_cast<const char*>(&arg), reinterpret_cast<const char*>(&arg) + sizeof(arg));
-                }
-                else if constexpr (std::is_same_v<T, Varchar>)
-                {
-                    auto str = arg.getValue();
-                    size_t strSize = str.size();
-                    data.insert(data.end(), reinterpret_cast<const char*>(&strSize), reinterpret_cast<const char*>(&strSize) + sizeof(strSize));
-                    data.insert(data.end(), str.begin(), str.end());
                 }
                 }, value);
         }
@@ -115,6 +108,7 @@ public:
         return data;
     }
 
+    
     static Record Deserialize(const std::vector<char>& data)
     {
         Record record;
@@ -182,15 +176,10 @@ public:
             }
             case Attribute::Type::VARCHAR:
             {
-                size_t strSize;
-                std::memcpy(&strSize, &data[offset], sizeof(strSize));
-                offset += sizeof(strSize);
-
-                std::string str(strSize, ' ');
-                std::memcpy(&str[0], &data[offset], strSize);
-                offset += strSize;
-
-                record.SetValue(name, Varchar(str, strSize));
+                const char* varcharValue;
+                std::memcpy(&varcharValue, &data[offset], sizeof(varcharValue));
+                offset += sizeof(varcharValue);
+                record.SetValue(name, varcharValue);
                 break;
             }
             }
@@ -198,7 +187,7 @@ public:
 
         return record;
     }
-    */
+    
 
 private:
     std::unordered_map<std::string, Attribute> attributes;

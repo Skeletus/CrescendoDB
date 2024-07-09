@@ -24,6 +24,16 @@ int main()
     }
 
     obj.PrintValues();
+
+    std::vector<char> dataSerial = obj.Serialize();
+    for (int i = 0; i < dataSerial.size(); i++)
+    {
+        std::cout << " data: ->" << dataSerial.data();
+        std::cout << std::endl;
+    }
+
+    Record objDeserial = Record::Deserialize(dataSerial);
+    objDeserial.PrintValues();
     
     
     return 0;
