@@ -26,9 +26,6 @@
     <ClInclude Include="Attribute.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="Varchar.h">
-      <Filter>Archivos de origen</Filter>
-    </ClInclude>
     <ClInclude Include="BinaryWriter.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>

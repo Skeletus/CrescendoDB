@@ -5,7 +5,6 @@
 #include <variant>
 #include <stdexcept>
 #include "Attribute.h"
-#include "Varchar.h"
 
 class Record 
 {
@@ -54,14 +53,7 @@ public:
             if (auto it = values.find(name); it != values.end()) 
             {
                 std::visit([](auto&& arg) {
-                    if constexpr (std::is_same_v<decltype(arg), Varchar>) 
-                    {
-                        std::cout << arg.getValue() << '\n';
-                    }
-                    else 
-                    {
-                        std::cout << arg << '\n';
-                    }
+                    std::cout << arg << '\n';
                     }, it->second);
             }
             else 

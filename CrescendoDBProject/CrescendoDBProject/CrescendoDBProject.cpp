@@ -1,7 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include "Record.h"
-#include "Varchar.h"
 #include "BinaryWriter.h"
 #include "CrescendoDBProject.h"
 
@@ -12,16 +11,16 @@ int main()
     obj.AddAttribute("height", Attribute::Type::DOUBLE);
     obj.AddAttribute("name", Attribute::Type::VARCHAR, 4);
 
-    const char* xd = "xd121212";
-    if (sizeof(xd) > 4)
+    std::string strxd = "saa";
+    if (strxd.length() > 4)
     {
-        std::cout << "error exceeds varchar capacity: " << 4;
+        std::cout << strxd.length() << " error exceeds varchar capacity: " << 4 << "\n";
     }
     else
     {
         obj.SetValue("age", 30);
         obj.SetValue("height", 5.9);
-        obj.SetValue("name", xd);
+        obj.SetValue("name", strxd.c_str());
     }
 
     obj.PrintValues();

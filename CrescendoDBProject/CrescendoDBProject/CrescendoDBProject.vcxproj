@@ -136,7 +136,6 @@
     <ClInclude Include="BinaryWriter.h" />
     <ClInclude Include="CrescendoDBProject.h" />
     <ClInclude Include="Record.h" />
-    <ClInclude Include="Varchar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
