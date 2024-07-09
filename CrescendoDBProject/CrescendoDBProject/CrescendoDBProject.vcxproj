@@ -132,6 +132,7 @@
     <ClCompile Include="CrescendoDBProject.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Attribute.h" />
     <ClInclude Include="Record.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
