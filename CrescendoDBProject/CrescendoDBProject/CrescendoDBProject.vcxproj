@@ -135,6 +135,7 @@
     <ClInclude Include="BTree.h" />
     <ClInclude Include="BTreeNode.h" />
     <ClInclude Include="CrescendoDBProject.h" />
+    <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="PageManager.h" />
     <ClInclude Include="Person.h" />
   </ItemGroup>
