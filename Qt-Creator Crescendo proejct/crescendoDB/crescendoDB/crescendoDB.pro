@@ -20,3 +20,6 @@ unix {
     target.path = $$[QT_INSTALL_PLUGINS]/generic
 }
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    Defines.pri
