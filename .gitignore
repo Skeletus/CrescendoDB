@@ -35,6 +35,9 @@
 *.bin
 *.index
 
+# qt-files
+*.idx
+
 # Directories
 .vs/
 x64/
