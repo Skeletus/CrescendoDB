@@ -16,6 +16,7 @@ int main() {
 }
 */
 
+/*
 #include "crescendo_parser.h"
 #include <iostream>
 
@@ -45,4 +46,29 @@ int main() {
 
     return 0;
 }
+*/
+
+#include "storage_manager.h"
+#include <iostream>
+
+int main() {
+    Crescendo::StorageManager storage_manager("crescendo_db.dat");
+
+    // Escribir una página de prueba
+    auto page = new Crescendo::Page(0);
+    strcpy(page->getData(), "Hello, CrescendoDB!");
+    storage_manager.writePage(page);
+    delete page;
+
+    // Leer la página de prueba
+    auto read_page = storage_manager.readPage(0);
+    if (read_page) {
+        std::cout << "Datos leidos de la pagina: " << read_page->getData() << std::endl;
+    } else {
+        std::cout << "Error al leer la pagina." << std::endl;
+    }
+
+    return 0;
+}
+
 
