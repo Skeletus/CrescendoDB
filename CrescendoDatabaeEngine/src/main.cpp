@@ -48,6 +48,7 @@ int main() {
 }
 */
 
+/*
 #include "storage_manager.h"
 #include <iostream>
 
@@ -70,5 +71,37 @@ int main() {
 
     return 0;
 }
+*/
+
+#include "storage_manager.h"
+#include "crescendo_parser.h"
+#include "query_executor.h"
+#include <iostream>
+
+int main() {
+    // Inicializar el gestor de almacenamiento
+    Crescendo::StorageManager storage_manager("crescendo_db.dat");
+
+    // Consulta de ejemplo
+    std::string query = "SELECT name, age FROM users";
+    Crescendo::CrescendoParser parser(query);
+
+    // Analizar la consulta
+    Crescendo::ASTNode* ast = parser.parse();
+    if (!ast) {
+        std::cerr << "Error: No se pudo analizar la consulta." << std::endl;
+        return 1;
+    }
+
+    // Ejecutar la consulta
+    Crescendo::CrescendoExecutor executor(&storage_manager);
+    executor.execute(ast);
+
+    // Liberar memoria del AST
+    delete ast;
+
+    return 0;
+}
+
 
 

@@ -35,6 +35,27 @@ namespace Crescendo {
         std::vector<ASTNode*> children;
         
         ASTNode(TokenType type, const std::string& value) : type(type), value(value) {}
+
+        // Obtener todas las columnas seleccionadas en una consulta SELECT
+        std::vector<std::string> getSelectedColumns() const {
+            std::vector<std::string> columns;
+            for (const auto& child : children) {
+                if (child->type == TokenType::IDENTIFIER) {
+                    columns.push_back(child->value);
+                }
+            }
+            return columns;
+        }
+
+        // Obtener el nombre de la tabla de la consulta SELECT
+        std::string getTableName() const {
+            for (const auto& child : children) {
+                if (child->type == TokenType::IDENTIFIER) {
+                    return child->value;  // Asumimos que el primer identificador después de FROM es el nombre de la tabla
+                }
+            }
+            return "";
+        }
     };
 
     // Clase modificada SQLParser con la función para analizar la consulta
