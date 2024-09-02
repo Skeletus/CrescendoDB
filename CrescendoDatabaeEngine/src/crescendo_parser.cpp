@@ -31,6 +31,7 @@ std::vector<Token> CrescendoParser::tokenize() {
         }
     }
 
+    std::cout << "tokenizado xd + tokens.size = " << tokens.size() << "\n";
     return tokens;
 }
 
@@ -106,6 +107,7 @@ bool CrescendoParser::isKeyword(const std::string& word) const {
 
 // Añadir al final del archivo sql_parser.cpp
 ASTNode* CrescendoParser::parse() {
+    current_pos_ = 0;
     tokens_ = tokenize();
     current_token_index_ = 0;
 
@@ -113,6 +115,7 @@ ASTNode* CrescendoParser::parse() {
     if (peekToken().type == TokenType::KEYWORD && peekToken().value == "SELECT") {
         return parseSelect();
     } else {
+        std::cout << "peekToken().type " << static_cast<int>(peekToken().type) << " != " << static_cast<int>(TokenType::KEYWORD);
         std::cerr << "Error: solo se soportan consultas SELECT por ahora." << std::endl;
         return nullptr;
     }
@@ -123,6 +126,7 @@ Token CrescendoParser::nextToken() {
 }
 
 Token CrescendoParser::peekToken() const {
+    std::cout << "current_token_index_ " << current_token_index_ << " y " << tokens_.size() << "\n";
     return (current_token_index_ < tokens_.size()) ? tokens_[current_token_index_] : Token{TokenType::END_OF_FILE, ""};
 }
 
@@ -131,22 +135,25 @@ ASTNode* CrescendoParser::parseSelect() {
 
     nextToken(); // Consumir la palabra clave SELECT
 
-    // Agregar columnas seleccionadas al AST
-    while (peekToken().type != TokenType::KEYWORD && peekToken().value != "FROM") {
-        root->children.push_back(new ASTNode(TokenType::IDENTIFIER, nextToken().value));
-        if (peekToken().type == TokenType::COMMA) {
+    // Procesar columnas seleccionadas
+    while (peekToken().type == TokenType::IDENTIFIER || peekToken().type == TokenType::COMMA) {
+        if (peekToken().type == TokenType::IDENTIFIER) {
+            root->children.push_back(new ASTNode(TokenType::IDENTIFIER, nextToken().value));
+        } else if (peekToken().type == TokenType::COMMA) {
             nextToken(); // Consumir la coma
         }
     }
 
-    if (peekToken().value != "FROM") {
+    // Verificar la presencia de la palabra clave 'FROM'
+    if (peekToken().type == TokenType::KEYWORD && peekToken().value == "FROM") {
+        nextToken(); // Consumir 'FROM'
+    } else {
         std::cerr << "Error: se esperaba 'FROM' después de SELECT." << std::endl;
         delete root;
         return nullptr;
     }
 
-    // Añadir la tabla de origen
-    nextToken(); // Consumir 'FROM'
+    // Procesar el nombre de la tabla
     if (peekToken().type == TokenType::IDENTIFIER) {
         root->children.push_back(new ASTNode(TokenType::IDENTIFIER, nextToken().value));
     } else {
@@ -155,7 +162,7 @@ ASTNode* CrescendoParser::parseSelect() {
         return nullptr;
     }
 
-    // TODO: Agregar lógica para WHERE, JOIN, ORDER BY, etc.
+    // TODO: Agregar lógica adicional para WHERE, JOIN, ORDER BY, etc.
 
     return root;
 }

@@ -23,15 +23,22 @@ int main() {
     std::string query = "SELECT name, age FROM users";
     Crescendo::CrescendoParser parser(query);
 
+    
     auto tokens = parser.tokenize();
     std::cout << "Tokens obtenidos:\n";
     for (const auto& token : tokens) {
         std::cout << "Tipo: " << static_cast<int>(token.type) << ", Valor: " << token.value << "\n";
     }
+    
 
     auto ast = parser.parse();
     if (ast) {
-        std::cout << "Consulta analizada con éxito.\n";
+        std::cout << "Consulta analizada con exito.\n";
+        std::cout << "Arbol de analisis generado:\n";
+        std::cout << "Nodo raiz: " << ast->value << "\n";
+        for (const auto& child : ast->children) {
+            std::cout << " - Nodo hijo: " << child->value << " (Tipo: " << static_cast<int>(child->type) << ")\n";
+        }
     } else {
         std::cout << "Error al analizar la consulta.\n";
     }
