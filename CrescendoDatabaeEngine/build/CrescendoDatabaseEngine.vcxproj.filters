@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\src\crescendo_api.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\src\crescendo_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\src\vm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\src\storage_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\src\page_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\src\transaction_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\src\query_optimizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{12536839-FFB2-3F3A-88EE-F37DDA670931}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

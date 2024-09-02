@@ -1,0 +1,3 @@
+D:/Repositorios Github/CrescendoDB/CrescendoDatabaeEngine/build/CMakeFiles/CrescendoDatabaseEngine.dir
+D:/Repositorios Github/CrescendoDB/CrescendoDatabaeEngine/build/CMakeFiles/ALL_BUILD.dir
+D:/Repositorios Github/CrescendoDB/CrescendoDatabaeEngine/build/CMakeFiles/ZERO_CHECK.dir
