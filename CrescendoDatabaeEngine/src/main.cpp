@@ -73,35 +73,41 @@ int main() {
 }
 */
 
-#include "storage_manager.h"
-#include "crescendo_parser.h"
-#include "query_executor.h"
 #include <iostream>
+#include "storage_manager.h"
+#include "transaction_manager.h"
+#include "query_executor.h"
+#include "crescendo_parser.h"
 
 int main() {
-    // Inicializar el gestor de almacenamiento
-    Crescendo::StorageManager storage_manager("crescendo_db.dat");
+    // Inicialización del StorageManager y TransactionManager
+    std::string db_name = "test_db";
+    Crescendo::StorageManager storage_manager(db_name);
+    Crescendo::TransactionManager transaction_manager(&storage_manager);
 
-    // Consulta de ejemplo
-    std::string query = "SELECT name, age FROM users";
-    Crescendo::CrescendoParser parser(query);
+    // Crear una transacción
+    std::cout << "Iniciando prueba de transaccion..." << std::endl;
+    transaction_manager.beginTransaction();
 
-    // Analizar la consulta
-    Crescendo::ASTNode* ast = parser.parse();
-    if (!ast) {
-        std::cerr << "Error: No se pudo analizar la consulta." << std::endl;
-        return 1;
+    // Simulación de algunas operaciones de base de datos dentro de la transacción
+    try {
+        std::cout << "Realizando operaciones dentro de la transaccion..." << std::endl;
+        
+        std::cout << "Insertando registro en la tabla 'users'..." << std::endl;
+        
+        // Confirmar transacción
+        std::cout << "Haciendo commit de la transaccion..." << std::endl;
+        transaction_manager.commitTransaction();
+    } catch (const std::exception& e) {
+        std::cerr << "Error durante la transaccion: " << e.what() << ". Realizando rollback." << std::endl;
+        transaction_manager.rollbackTransaction();
     }
 
-    // Ejecutar la consulta
-    Crescendo::CrescendoExecutor executor(&storage_manager);
-    executor.execute(ast);
-
-    // Liberar memoria del AST
-    delete ast;
+    // Verificar que el commit fue exitoso o el rollback fue realizado
+    std::cout << "Estado de la base de datos despues de la transaccion:" << std::endl;
+    storage_manager.select("users", {"name", "age"});
 
     return 0;
 }
-
 
 
