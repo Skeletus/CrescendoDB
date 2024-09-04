@@ -1,2 +1,6 @@
-﻿  main.cpp
+﻿  crescendo_parser.cpp
+  main.cpp
+  storage_manager.cpp
+  transaction_manager.cpp
+  Generando código...
   CrescendoDatabaseEngine.vcxproj -> D:\Repositorios Github\CrescendoDB\CrescendoDatabaeEngine\build\Debug\CrescendoDatabaseEngine.exe

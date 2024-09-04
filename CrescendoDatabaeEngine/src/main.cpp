@@ -73,41 +73,17 @@ int main() {
 }
 */
 
-#include <iostream>
 #include "storage_manager.h"
-#include "transaction_manager.h"
-#include "query_executor.h"
-#include "crescendo_parser.h"
 
 int main() {
-    // Inicialización del StorageManager y TransactionManager
-    std::string db_name = "test_db";
-    Crescendo::StorageManager storage_manager(db_name);
-    Crescendo::TransactionManager transaction_manager(&storage_manager);
+    Crescendo::StorageManager storage_manager("my_database");
 
-    // Crear una transacción
-    std::cout << "Iniciando prueba de transaccion..." << std::endl;
-    transaction_manager.beginTransaction();
+    // Prueba para CREATE TABLE
+    storage_manager.createTable("my_table", {"id INT", "name TEXT"});
 
-    // Simulación de algunas operaciones de base de datos dentro de la transacción
-    try {
-        std::cout << "Realizando operaciones dentro de la transaccion..." << std::endl;
-        
-        std::cout << "Insertando registro en la tabla 'users'..." << std::endl;
-        
-        // Confirmar transacción
-        std::cout << "Haciendo commit de la transaccion..." << std::endl;
-        transaction_manager.commitTransaction();
-    } catch (const std::exception& e) {
-        std::cerr << "Error durante la transaccion: " << e.what() << ". Realizando rollback." << std::endl;
-        transaction_manager.rollbackTransaction();
-    }
-
-    // Verificar que el commit fue exitoso o el rollback fue realizado
-    std::cout << "Estado de la base de datos despues de la transaccion:" << std::endl;
-    storage_manager.select("users", {"name", "age"});
+    // Prueba para INSERT
+    storage_manager.insertIntoTable("my_table", {"1", "John Doe"});
+    storage_manager.insertIntoTable("my_table", {"2", "Jane Smith"});
 
     return 0;
 }
-
-

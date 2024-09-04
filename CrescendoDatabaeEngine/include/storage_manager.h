@@ -3,6 +3,8 @@
 
 #include "page_manager.h"
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace Crescendo {
 
@@ -34,16 +36,15 @@ public:
     void select(const std::string& table_name, const std::vector<std::string>& columns);
 
     // TODO: Implementar otras funciones como creación de tablas, manipulación de datos, etc.
+    void createTable(const std::string& table_name, const std::vector<std::string>& columns); // Nueva función para crear tablas
+    void insertIntoTable(const std::string& table_name, const std::vector<std::string>& values); // Nueva función para insertar registros
 
 private:
     PageManager page_manager_;
+    std::unordered_map<std::string, std::vector<std::string>> table_schema_; // Mapa para almacenar la estructura de las tablas
 
     // Función auxiliar para simular la obtención de registros de una tabla (provisional)
     std::vector<Record> fetchAllRecords(const std::string& table_name);
-
-    void createTable(const std::string& table_name);
-    void insertRecord(const std::string& table_name, const std::vector<std::string>& values);
-
 };
 
 }  // namespace CrescendoDB
