@@ -1,5 +1,6 @@
 #include "query_executor.h"
 #include <iostream>
+#include <filesystem>
 
 namespace Crescendo {
 
@@ -70,5 +71,69 @@ void CrescendoExecutor::executeTransactionCommand(ASTNode* ast) {
         std::cerr << "Error: Comando de transacción no reconocido: " << ast->value << std::endl;
     }
 }
+
+void CrescendoExecutor::executeCreateDatabase(ASTNode* node) {
+    std::string db_name = node->children[0]->value;
+
+    // Lógica para crear el directorio de la base de datos
+    try {
+        if (std::filesystem::create_directory(db_name)) {
+            std::cout << "Base de datos '" << db_name << "' creada exitosamente." << std::endl;
+        } else {
+            std::cerr << "Error: no se pudo crear la base de datos o ya existe." << std::endl;
+        }
+    } catch (const std::filesystem::filesystem_error& e) {
+        std::cerr << "Error al crear la base de datos: " << e.what() << std::endl;
+    }
+}
+
+void CrescendoExecutor::executeCreateTable(ASTNode* node) {
+    std::string table_name = node->children[0]->value;
+    // Lógica para crear la estructura de la tabla
+    std::string table_file_path = "database/" + table_name + ".tbl";
+    std::ofstream table_file(table_file_path);
+
+    if (table_file.is_open()) {
+        // Crear el encabezado de la tabla (especificación de columnas)
+        for (size_t i = 1; i < node->children.size(); ++i) {
+            ASTNode* column_node = node->children[i];
+            table_file << column_node->value;
+            if (i < node->children.size() - 1) {
+                table_file << ",";
+            }
+        }
+        table_file << std::endl; // Nueva línea al final de las columnas
+        table_file.close();
+        std::cout << "Tabla '" << table_name << "' creada exitosamente." << std::endl;
+    } else {
+        std::cerr << "Error: no se pudo crear el archivo de la tabla." << std::endl;
+    }
+}
+
+void CrescendoExecutor::executeInsert(ASTNode* node) {
+    std::string table_name = node->children[0]->value;
+    // Lógica para insertar datos en la tabla
+    std::string table_name = node->children[0]->value;
+    std::string table_file_path = "database/" + table_name + ".tbl";
+    
+    std::ofstream table_file(table_file_path, std::ios::app); // Abrir el archivo en modo adjuntar
+
+    if (table_file.is_open()) {
+        // Lógica para insertar datos en la tabla
+        for (size_t i = 1; i < node->children.size(); ++i) {
+            ASTNode* value_node = node->children[i];
+            table_file << value_node->value;
+            if (i < node->children.size() - 1) {
+                table_file << ",";
+            }
+        }
+        table_file << std::endl; // Nueva línea al final del registro
+        table_file.close();
+        std::cout << "Registro insertado en la tabla '" << table_name << "' exitosamente." << std::endl;
+    } else {
+        std::cerr << "Error: no se pudo abrir el archivo de la tabla para insertar datos." << std::endl;
+    }
+}
+
 
 }

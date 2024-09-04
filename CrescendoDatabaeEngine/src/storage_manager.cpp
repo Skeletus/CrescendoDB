@@ -44,4 +44,13 @@ std::vector<Record> StorageManager::fetchAllRecords(const std::string& table_nam
     return records;
 }
 
+void StorageManager::createTable(const std::string& table_name) {
+    // Lógica para crear una tabla en el almacenamiento
+}
+
+void StorageManager::insertRecord(const std::string& table_name, const std::vector<std::string>& values) {
+    // Lógica para insertar un registro en una tabla
+}
+
+
 }  // namespace Crescendo

@@ -40,6 +40,10 @@ private:
 
     // Función auxiliar para simular la obtención de registros de una tabla (provisional)
     std::vector<Record> fetchAllRecords(const std::string& table_name);
+
+    void createTable(const std::string& table_name);
+    void insertRecord(const std::string& table_name, const std::vector<std::string>& values);
+
 };
 
 }  // namespace CrescendoDB

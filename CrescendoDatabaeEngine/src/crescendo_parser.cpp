@@ -171,4 +171,57 @@ ASTNode* CrescendoParser::parseSelect() {
     return root;
 }
 
+ASTNode* CrescendoParser::parseCreateDatabase() {
+    ASTNode* root = new ASTNode(TokenType::KEYWORD, "CREATE DATABASE");
+    nextToken(); // Consumir 'CREATE'
+    nextToken(); // Consumir 'DATABASE'
+    
+    if (peekToken().type == TokenType::IDENTIFIER) {
+        root->children.push_back(new ASTNode(TokenType::IDENTIFIER, nextToken().value));
+    } else {
+        std::cerr << "Error: se esperaba un nombre de base de datos." << std::endl;
+        delete root;
+        return nullptr;
+    }
+    
+    return root;
+}
+
+ASTNode* CrescendoParser::parseCreateTable() {
+    ASTNode* root = new ASTNode(TokenType::KEYWORD, "CREATE TABLE");
+    nextToken(); // Consumir 'CREATE'
+    nextToken(); // Consumir 'TABLE'
+    
+    if (peekToken().type == TokenType::IDENTIFIER) {
+        root->children.push_back(new ASTNode(TokenType::IDENTIFIER, nextToken().value));
+    } else {
+        std::cerr << "Error: se esperaba un nombre de tabla." << std::endl;
+        delete root;
+        return nullptr;
+    }
+    
+    // Agregar lógica para analizar la definición de columnas
+    
+    return root;
+}
+
+ASTNode* CrescendoParser::parseInsert() {
+    ASTNode* root = new ASTNode(TokenType::KEYWORD, "INSERT INTO");
+    nextToken(); // Consumir 'INSERT'
+    nextToken(); // Consumir 'INTO'
+    
+    if (peekToken().type == TokenType::IDENTIFIER) {
+        root->children.push_back(new ASTNode(TokenType::IDENTIFIER, nextToken().value));
+    } else {
+        std::cerr << "Error: se esperaba un nombre de tabla después de 'INSERT INTO'." << std::endl;
+        delete root;
+        return nullptr;
+    }
+    
+    // Agregar lógica para analizar columnas y valores
+
+    return root;
+}
+
+
 } // namespace Crescendo

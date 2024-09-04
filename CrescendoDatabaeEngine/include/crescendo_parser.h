@@ -82,6 +82,11 @@ namespace Crescendo {
         Token nextToken();
         Token peekToken() const;
         ASTNode* parseSelect(); // Función específica para consultas SELECT
+
+        // Agrega las nuevas funciones de análisis para CREATE DATABASE, CREATE TABLE, INSERT INTO
+        ASTNode* parseCreateDatabase();
+        ASTNode* parseCreateTable();
+        ASTNode* parseInsert();
     };    
 
 } // namespace Crescendo

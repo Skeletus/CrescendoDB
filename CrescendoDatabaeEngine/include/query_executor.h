@@ -25,6 +25,11 @@ namespace Crescendo {
 
         // Ejecuta comandos de transacción como BEGIN, COMMIT y ROLLBACK
         void executeTransactionCommand(ASTNode* ast);
+
+        void executeCreateDatabase(ASTNode* node);
+        void executeCreateTable(ASTNode* node);
+        void executeInsert(ASTNode* node);
+
     };
 
 }  // namespace Crescendo
