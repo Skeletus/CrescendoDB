@@ -11,7 +11,7 @@ namespace Crescendo {
 constexpr int MIN_DEGREE = 3;
 
 // Nodo del árbol B.
-class BTreeNode {
+class BTreeNode : public std::enable_shared_from_this<BTreeNode>{
 public:
     BTreeNode(bool is_leaf);
 
