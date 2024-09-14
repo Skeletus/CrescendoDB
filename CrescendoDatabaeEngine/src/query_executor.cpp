@@ -55,6 +55,14 @@ void CrescendoExecutor::executeSelect(ASTNode* ast) {
         return;
     }
 
+     // Suponiendo que buscamos por clave primaria
+    for (auto& child : ast->children[0]->children) {
+            std::cout <<"Columna seleccionada: " << child->value << std::endl;
+    }
+
+    // Realizar búsqueda de ejemplo en el B-Tree para claves
+    storage_manager_->searchInTable(table_name, 10);
+
     // Llama al StorageManager para ejecutar la operación SELECT
     storage_manager_->select(table_name, columns);
 }
@@ -104,6 +112,9 @@ void CrescendoExecutor::executeCreateTable(ASTNode* node) {
         }
         table_file << std::endl; // Nueva línea al final de las columnas
         table_file.close();
+        std::vector<std::string> columns;
+        // Lógica para crear la tabla en el almacenamiento
+        storage_manager_->createTable(table_name, columns);
         std::cout << "Tabla '" << table_name << "' creada exitosamente." << std::endl;
     } else {
         std::cerr << "Error: no se pudo crear el archivo de la tabla." << std::endl;
