@@ -2,6 +2,7 @@
 #define CRESCENDO_STORAGE_MANAGER_H
 
 #include "page_manager.h"
+#include "crescendo_btree.h"
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -38,6 +39,8 @@ public:
     // TODO: Implementar otras funciones como creación de tablas, manipulación de datos, etc.
     void createTable(const std::string& table_name, const std::vector<std::string>& columns); // Nueva función para crear tablas
     void insertIntoTable(const std::string& table_name, const std::vector<std::string>& values); // Nueva función para insertar registros
+    // Buscar una clave en el B-Tree asociado a la tabla
+    void searchInTable(const std::string& table_name, int key);
 
 private:
     PageManager page_manager_;
@@ -45,6 +48,7 @@ private:
 
     // Función auxiliar para simular la obtención de registros de una tabla (provisional)
     std::vector<Record> fetchAllRecords(const std::string& table_name);
+    std::unordered_map<std::string, std::shared_ptr<BTree>> btree_indices_; // Índices de B-Trees por tabla
 };
 
 }  // namespace CrescendoDB

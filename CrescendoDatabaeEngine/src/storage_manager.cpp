@@ -67,6 +67,15 @@ void StorageManager::createTable(const std::string& table_name, const std::vecto
     } else {
         std::cerr << "Error: no se pudo crear la tabla '" << table_name << "'." << std::endl;
     }
+
+    if (btree_indices_.find(table_name) == btree_indices_.end()) 
+    {
+            // Crear un nuevo B-Tree para la tabla
+            btree_indices_[table_name] = std::make_shared<BTree>();
+            std::cout << "Tabla '" << table_name << "' creada exitosamente." << std::endl;
+    } else {
+            std::cerr << "Error: La tabla '" << table_name << "' ya existe." << std::endl;
+    }
 }
 
 void StorageManager::insertIntoTable(const std::string& table_name, const std::vector<std::string>& values) {
@@ -93,6 +102,23 @@ void StorageManager::insertIntoTable(const std::string& table_name, const std::v
     } else {
         std::cerr << "Error: no se pudo abrir la tabla '" << table_name << "' para insertar datos." << std::endl;
     }
+}
+
+// Buscar una clave en el B-Tree asociado a la tabla
+void StorageManager::searchInTable(const std::string& table_name, int key) 
+{
+    if (btree_indices_.find(table_name) != btree_indices_.end()) 
+    {
+            auto node = btree_indices_[table_name]->search(key);
+            if (node) {
+                std::cout << "Clave '" << key << "' encontrada en la tabla '" << table_name << "'." << std::endl;
+            } else {
+                std::cout << "Clave '" << key << "' no encontrada en la tabla '" << table_name << "'." << std::endl;
+            }
+    } 
+    else {
+            std::cerr << "Error: La tabla '" << table_name << "' no existe." << std::endl;
+        }
 }
 
 }  // namespace Crescendo
